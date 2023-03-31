@@ -26,15 +26,19 @@ Described here are the parameters available and their usage for generating the g
 | --reverse | Whether or not the gif should play in reverse. Defaults to false. | `--reverse` | Yes |
 | --optimize-size | Tries to perform some compression on the gif. Does not work well and has additional dependency requirements | `--optimize-size` | Yes |
 
-### Simple Gif - no caption
+### Gif without caption
 
 ![naked gun](examples/nakedgun.gif)
 
 `python .\giferator.py --start "19:19" --duration 5 --input .\source\video2.avi --out .\output\nakedgun.gif --image-scale 0.7`
 
+### Gif with caption
+
 ![caption gif](examples/example_caption.gif)
 
 `python .\giferator.py --start "17:30" --duration 5 --text "Me taking out trash mobs" --input .\source\video.mp4 --out .\output\example_caption.gif`
+
+### Reversed gif with caption
 
 ![reversed gif](examples/example_reversed.gif)
 
