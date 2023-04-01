@@ -25,6 +25,7 @@ Described here are the parameters available and their usage for generating the g
 | --image-scale | Defines how much the gif images get scaled. Defaults to 0.5 | `--image-scale 0.9` | Yes |
 | --reverse | Whether or not the gif should play in reverse. Defaults to false. | `--reverse` | Yes |
 | --optimize-size | Tries to perform some compression on the gif. Does not work well and has additional dependency requirements | `--optimize-size` | Yes |
+| --cull | Reduces the fps of the gif (in relation to the fps of the video) by the specified amount | `--cull 3` | Yes |
 
 ### Gif without caption
 
@@ -50,6 +51,16 @@ The following dependencies are required to run giferator:
 
 * opencv-python
 * imageio
+* pygifsicle
 
 If you wish to use the compression flag (--optimize-size) you need to additionally install [pygifsicle](https://pypi.org/project/pygifsicle/).
-In my experiments the file size wasn't drastically improved but the quality of the resulting was much worse.
+Besides installing it via `pip install` you may need to perform additional steps, depending on your OS.
+In my experiments the file size wasn't drastically improved but the quality of the resulting gif was much worse.
+
+## How to reduce file size
+
+You have three options to reduce the file size of the resulting gif:
+
+1. You can scale down the image size via `--image-scale`. The smaller the scale factor, the smaller the resulting gif.
+2. You can use `--cull` to include less frames in your gif. A higher cull results in a smaller gif, but the gif gets more choppier.
+3. (Not recommended) You can use `--optimize-size` if you have pygifsicle installed. It reduces the gif by a bit, but the quality gets noticeably worse.

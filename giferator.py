@@ -139,18 +139,25 @@ def writeCenteredText(frames, text, fontScale, thickness, font=cv.FONT_HERSHEY_S
                                org=textOrigin,
                                fontFace=font,
                                fontScale=fontScale,
+                               color=(255, 255, 255),
+                               thickness=thickness + 2)
+        frames[i] = cv.putText(img=frames[i],
+                               text=text,
+                               org=textOrigin,
+                               fontFace=font,
+                               fontScale=fontScale,
                                color=(0, 0, 0),
                                thickness=thickness)
         
     return frames
 
-def downscaleImages(frames, scaleFactor):
+def scaleImages(frames, scaleFactor):
     """
-    Scales down the image frames by the given scaleFactor.
-    Returns the downsized frames.
+    Scales the image frames by the given scaleFactor.
+    Returns the scaled frames.
 
     frames : List of image frames
-    scaleFactor : Factor the images get scaled down by
+    scaleFactor : Factor the images get scaled by
     """
     height, width, _ = frames[0].shape
     newDimensions = (int(width * scaleFactor), int(height * scaleFactor))
@@ -191,6 +198,7 @@ parser.add_argument("--text", required=False, help="text to put into the gif")
 parser.add_argument("--image-scale", required=False, type=float, help="factor the image size gets scaled by. default is 0.5")
 parser.add_argument("--reverse", required=False, action="store_true", help="whether the gif should play in reverse. default is false")
 parser.add_argument("--optimize-size", required=False, action="store_true", help="whether the gif should be optimized for filesize. default is false")
+parser.add_argument("--cull", required=False, type=int, help="how much of the frames of the video get reduced by for the gif. default is 3")
 
 args = parser.parse_args()
 
@@ -201,10 +209,12 @@ if not args.reverse == None:
 frames, fps = getFramesFromVideo(args.input, startString=args.start, duration=args.duration, reverse=reverseGif)
 
 cull = 3
+if not args.cull == None:
+    cull = args.cull
 frames = reduceFrames(frames, cull)
 
 if not args.text == None:
-    thickness = 4
+    thickness = 6
     fontScale = autoscaleTextSize(frames[0].shape, args.text, thickness)
     frames = writeCenteredText(frames, args.text, fontScale, thickness)
 
@@ -212,7 +222,7 @@ imageScale = 0.5
 if not args.image_scale == None:
     imageScale = args.image_scale
 
-frames = downscaleImages(frames, imageScale)
+frames = scaleImages(frames, imageScale)
 
 saveGif(frames, fps / cull, args.out)
 
