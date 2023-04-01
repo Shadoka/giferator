@@ -2,6 +2,15 @@ import cv2 as cv
 import imageio
 import argparse
 from pygifsicle import optimize
+from enum import Enum
+
+class Color(Enum):
+    BLACK   = (0, 0, 0)
+    WHITE   = (255, 255, 255)
+    RED     = (0, 0, 255)
+    GREEN   = (0, 255, 0)
+    BLUE    = (255, 0, 0)
+    YELLOW  = (0, 255, 255)
 
 def getFramesFromVideo(filepath, startString, duration=2, reverse=False):
     """
@@ -113,7 +122,7 @@ def autoscaleTextSize(imageShape, text, thickness, font=cv.FONT_HERSHEY_SIMPLEX)
     # FIXME: buggy when text with font scale 1 is already too long
     return fontScale - 1.
 
-def writeCenteredText(frames, text, fontScale, thickness, font=cv.FONT_HERSHEY_SIMPLEX):
+def writeCenteredText(frames, text, fontScale, thickness, color, outlineColor, font=cv.FONT_HERSHEY_SIMPLEX):
     """
     Writes the specified text with the given font settings into every
     frame in 'frames'.
@@ -121,9 +130,11 @@ def writeCenteredText(frames, text, fontScale, thickness, font=cv.FONT_HERSHEY_S
 
     frames : List of image frames
     text : Text to be written in each frame
-    font : Font to be used
     fontScale : Font size
     thickness : Thickness of the writing
+    color : Color of the text
+    outline : Color of the outline of the text
+    font : Font to be used
     """
     paddingVertical = 100
 
@@ -139,14 +150,14 @@ def writeCenteredText(frames, text, fontScale, thickness, font=cv.FONT_HERSHEY_S
                                org=textOrigin,
                                fontFace=font,
                                fontScale=fontScale,
-                               color=(255, 255, 255),
+                               color=outlineColor.value,
                                thickness=thickness + 2)
         frames[i] = cv.putText(img=frames[i],
                                text=text,
                                org=textOrigin,
                                fontFace=font,
                                fontScale=fontScale,
-                               color=(0, 0, 0),
+                               color=color.value,
                                thickness=thickness)
         
     return frames
@@ -189,6 +200,24 @@ def calculateStart(startString, fps):
 
     return int(seconds * fps), seconds
 
+def parseColor(colorString):
+    match colorString.lower():
+        case "black":
+            return Color.BLACK
+        case "white":
+            return Color.WHITE
+        case "red":
+            return Color.RED
+        case "green":
+            return Color.GREEN
+        case "blue":
+            return Color.BLUE
+        case "yellow":
+            return Color.YELLOW
+        case _:
+            return Color.BLACK
+        
+
 parser = argparse.ArgumentParser(description="Generate Gifs out of videos")
 parser.add_argument("--start", required=True, help="start timestamp in the video of the gif recording, e.g. 5:35")
 parser.add_argument("--duration", required=True, type=int, help="duration of the gif recording in seconds")
@@ -199,6 +228,8 @@ parser.add_argument("--image-scale", required=False, type=float, help="factor th
 parser.add_argument("--reverse", required=False, action="store_true", help="whether the gif should play in reverse. default is false")
 parser.add_argument("--optimize-size", required=False, action="store_true", help="whether the gif should be optimized for filesize. default is false")
 parser.add_argument("--cull", required=False, type=int, help="how much of the frames of the video get reduced by for the gif. default is 3")
+parser.add_argument("--color", required=False, help="color of the text (available: red, blue, green, yellow, black, white). default is black")
+parser.add_argument("--outline-color", required=False, help="color of the outline of the text (available: red, blue, green, yellow, black, white). default is white")
 
 args = parser.parse_args()
 
@@ -214,9 +245,17 @@ if not args.cull == None:
 frames = reduceFrames(frames, cull)
 
 if not args.text == None:
+    color = Color.BLACK
+    if not args.color == None:
+        color = parseColor(args.color)
+    
+    outlineColor = Color.WHITE
+    if not args.outline_color == None:
+        outlineColor = parseColor(args.outline_color)
+
     thickness = 6
     fontScale = autoscaleTextSize(frames[0].shape, args.text, thickness)
-    frames = writeCenteredText(frames, args.text, fontScale, thickness)
+    frames = writeCenteredText(frames, args.text, fontScale, thickness, color, outlineColor)
 
 imageScale = 0.5
 if not args.image_scale == None:

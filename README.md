@@ -26,6 +26,8 @@ Described here are the parameters available and their usage for generating the g
 | --reverse | Whether or not the gif should play in reverse. Defaults to false. | `--reverse` | Yes |
 | --optimize-size | Tries to perform some compression on the gif. Does not work well and has additional dependency requirements | `--optimize-size` | Yes |
 | --cull | Reduces the fps of the gif (in relation to the fps of the video) by the specified amount | `--cull 3` | Yes |
+| --color | Color of the text (available: red, blue, green, yellow, black, white). Default is black | `--color "red"`| Yes |
+| --outline-color | Color of the outline of the text. See above for values. Default is white | `--outline-color "yellow"` | Yes |
 
 ### Gif without caption
 
@@ -47,6 +49,7 @@ Described here are the parameters available and their usage for generating the g
 
 ## Dependencies
 
+Python has to be in version >= 3.10.
 The following dependencies are required to run giferator:
 
 * opencv-python
