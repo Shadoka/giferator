@@ -270,5 +270,4 @@ if not args.fps == None:
 saveGif(frames, gifFps, args.out)
 
 if args.optimize_size:
-    print("in optimize")
     optimize(args.out)
