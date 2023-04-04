@@ -145,14 +145,14 @@ def writeCenteredText(frames, text, fontScale, thickness, color, outlineColor, f
     textOrigin = (int((imageWidth - textWidth) / 2), textHeight + paddingVertical)
 
     for i in range(len(frames)):
-        frames[i] = cv.putText(img=frames[i],
+        currentImage = cv.putText(img=frames[i],
                                text=text,
                                org=textOrigin,
                                fontFace=font,
                                fontScale=fontScale,
                                color=outlineColor.value,
                                thickness=thickness + 2)
-        frames[i] = cv.putText(img=frames[i],
+        frames[i] = cv.putText(img=currentImage,
                                text=text,
                                org=textOrigin,
                                fontFace=font,
@@ -220,7 +220,7 @@ def parseColor(colorString):
 
 parser = argparse.ArgumentParser(description="Generate Gifs out of videos")
 parser.add_argument("--start", required=True, help="start timestamp in the video of the gif recording, e.g. 5:35")
-parser.add_argument("--duration", required=True, type=int, help="duration of the gif recording in seconds")
+parser.add_argument("--duration", required=True, type=float, help="duration of the gif recording in seconds")
 parser.add_argument("--input", required=True, help="input video to make the gif from")
 parser.add_argument("--out", required=True, help="output file path for the gif")
 parser.add_argument("--text", required=False, help="text to put into the gif")

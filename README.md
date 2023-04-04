@@ -25,7 +25,7 @@ Described here are the parameters available and their usage for generating the g
 | --image-scale | Defines how much the gif images get scaled. Defaults to 0.5 | `--image-scale 0.9` | Yes |
 | --reverse | Whether or not the gif should play in reverse. Defaults to false. | `--reverse` | Yes |
 | --optimize-size | Tries to perform some compression on the gif. Does not work well and has additional dependency requirements | `--optimize-size` | Yes |
-| --cull | Reduces the fps of the gif (in relation to the fps of the video) by the specified amount | `--cull 3` | Yes |
+| --cull | Reduces the fps of the gif (in relation to the fps of the video) by the specified amount. Default is 3 | `--cull 3` | Yes |
 | --color | Color of the text (available: red, blue, green, yellow, black, white). Default is black | `--color "red"`| Yes |
 | --outline-color | Color of the outline of the text. See above for values. Default is white | `--outline-color "yellow"` | Yes |
 
@@ -45,7 +45,7 @@ Described here are the parameters available and their usage for generating the g
 
 ![reversed gif](examples/example_reversed.gif)
 
-`python .\giferator.py --start "17:30" --duration 5 --text "Me hearing boss music playing" --input .\source\video.mp4 --out .\output\example_reversed.gif --reverse`
+`python .\giferator.py --start "17:30" --duration 5 --text "Me when I hear boss music playing" --input .\source\video.mp4 --out .\output\example_reversed.gif --reverse`
 
 ## Dependencies
 
