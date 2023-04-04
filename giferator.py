@@ -230,14 +230,14 @@ parser.add_argument("--optimize-size", required=False, action="store_true", help
 parser.add_argument("--cull", required=False, type=int, help="how much of the frames of the video get reduced by for the gif. default is 3")
 parser.add_argument("--color", required=False, help="color of the text (available: red, blue, green, yellow, black, white). default is black")
 parser.add_argument("--outline-color", required=False, help="color of the outline of the text (available: red, blue, green, yellow, black, white). default is white")
+parser.add_argument("--tell-fps", required=False, action="store_true", help="Prints out the fps of the underlying source material")
+parser.add_argument("--fps", required=False, help="Overrides the calculated fps of the resulting gif")
 
 args = parser.parse_args()
 
-reverseGif = False
-if not args.reverse == None:
-    reverseGif = args.reverse
-
-frames, fps = getFramesFromVideo(args.input, startString=args.start, duration=args.duration, reverse=reverseGif)
+frames, fps = getFramesFromVideo(args.input, startString=args.start, duration=args.duration, reverse=args.reverse)
+if args.tell_fps:
+    print(f"the input material has {fps} fps")
 
 cull = 3
 if not args.cull == None:
@@ -263,7 +263,12 @@ if not args.image_scale == None:
 
 frames = scaleImages(frames, imageScale)
 
-saveGif(frames, fps / cull, args.out)
+gifFps = fps / cull
+if not args.fps == None:
+    gifFps = args.fps
 
-if not args.optimize_size == None:
+saveGif(frames, gifFps, args.out)
+
+if args.optimize_size:
+    print("in optimize")
     optimize(args.out)
