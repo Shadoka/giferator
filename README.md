@@ -28,6 +28,8 @@ Described here are the parameters available and their usage for generating the g
 | --cull | Reduces the fps of the gif (in relation to the fps of the video) by the specified amount. Default is 3 | `--cull 3` | Yes |
 | --color | Color of the text (available: red, blue, green, yellow, black, white). Default is black | `--color "red"`| Yes |
 | --outline-color | Color of the outline of the text. See above for values. Default is white | `--outline-color "yellow"` | Yes |
+| --tell-fps | Writes out the fps of the video source material | `--tell-fps` | Yes |
+| --fps | Overrides the calculated fps of the gif. Higher fps = faster playback | `--fps 25` | Yes |
 
 ### Gif without caption
 
